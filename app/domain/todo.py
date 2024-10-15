@@ -11,12 +11,14 @@ class Todo:
                  task: str, 
                  created_at: datetime, 
                  completed: bool = False, 
+                 location_id: Optional[int] = None,
                  location: Optional[Location] = None, 
                  due_date: Optional[datetime] = None, 
                  updated_at: Optional[datetime] = None):
         self.id: uuid.UUID = id
         self.task: str = task
         self.completed: bool = completed
+        self.location_id: Optional[int] = location_id
         self.location: Optional[Location] = location
         self.due_date: Optional[datetime] = due_date
         self.created_at: datetime = created_at

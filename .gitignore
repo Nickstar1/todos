@@ -1,0 +1,12 @@
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+
+# Caches
+**/__pycache__/
+
+# Virtual Environment
+venv/
+
+# Database Files
+*.db
