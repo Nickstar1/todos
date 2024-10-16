@@ -5,6 +5,7 @@ import uuid
 
 from app.domain.location import Location
 from app.domain.todo import Todo
+from app.exceptions.location_not_found import LocationNotFoundError
 from app.exceptions.todo_not_found import TodoNotFoundError
 from app.repositories.todo_repository import TodoRepository
 
@@ -128,6 +129,27 @@ class SQLiteTodoRepository(TodoRepository):
         finally:
             cursor.close()
 
+    def create_todo_location(self, location: Location) -> int:
+        cursor: Cursor = self.connection.cursor()
+        query = '''
+        INSERT INTO location (latitude, longitude, address)
+        VALUES (?, ?, ?);
+        '''
+
+        try: 
+            cursor.execute(query, (
+                location.latitude, 
+                location.longitude,
+                location.address
+            ))
+            self.connection.commit()
+            return cursor.lastrowid
+        except Exception as e:
+            print(f'error creating location: {e}')
+            self.connection.rollback()
+        finally: 
+            cursor.close()
+
     def update_todo_location(self, location: Location) -> None:
         cursor: Cursor = self.connection.cursor()
 
@@ -136,10 +158,6 @@ class SQLiteTodoRepository(TodoRepository):
         SET latitude = ?, longitude = ?, address = ?, updated_at = ?
         WHERE id = ?;
         '''
-
-        #
-        # TODO: update updated_at in todo
-        #
 
         try: 
             cursor.execute(update_location_query, (
@@ -152,6 +170,32 @@ class SQLiteTodoRepository(TodoRepository):
         except Exception as e:
             print(f'error updating location: {e}')
             self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def delete_todo_location(self, location_id):
+        cursor: Cursor = self.connection.cursor()
+
+        select_query = '''
+        SELECT * FROM location WHERE id = ?;
+        '''
+
+        try:
+            cursor.execute(select_query, (str(location_id),))
+            row = cursor.fetchone()
+
+            if row is None:
+                raise LocationNotFoundError(location_id)
+            
+            delete_query = '''
+            DELETE FROM location WHERE id = ?;
+            '''
+            cursor.execute(delete_query, (str(location_id),))
+            self.connection.commit()
+        except Exception as e:
+            print(f'error deleting location: {e}')
+            self.connection.rollback()
+            raise
         finally:
             cursor.close()
 

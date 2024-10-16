@@ -15,7 +15,15 @@ class TodoRepository(ABC):
         pass
 
     @abstractmethod
+    def create_todo_location(self, location: Location) -> int:
+        pass
+
+    @abstractmethod
     def update_todo_location(self, location: Location) -> None:
+        pass
+
+    @abstractmethod
+    def delete_todo_location(self, location_id: int) -> None:
         pass
 
     @abstractmethod
