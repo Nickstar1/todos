@@ -1,3 +1,4 @@
+from datetime import datetime
 import sqlite3
 from sqlite3 import Connection, Cursor
 from typing import List
@@ -230,9 +231,9 @@ class SQLiteTodoRepository(TodoRepository):
                 completed=row[2],
                 location_id=location.id if location is not None else None,
                 location=location,
-                due_date=row[4],
-                created_at=row[5],
-                updated_at=row[6]
+                due_date=datetime.strptime(row[4], '%Y-%m-%d %H:%M:%S') if row[4] is not None else None,
+                created_at=datetime.strptime(row[5], '%Y-%m-%d %H:%M:%S.%f') if row[5] is not None else None,
+                updated_at=datetime.strptime(row[6], '%Y-%m-%d %H:%M:%S.%f') if row[6] is not None else None
             )
         except Exception as e:
             print(f'error reading todo: {e}')
@@ -270,9 +271,9 @@ class SQLiteTodoRepository(TodoRepository):
                     completed=row[2],
                     location_id=location.id if location is not None else None,
                     location=location,
-                    due_date=row[4],
-                    created_at=row[5],
-                    updated_at=row[6]
+                    due_date=datetime.strptime(row[4], '%Y-%m-%d %H:%M:%S') if row[4] is not None else None,
+                    created_at=datetime.strptime(row[5], '%Y-%m-%d %H:%M:%S.%f') if row[5] is not None else None,
+                    updated_at=datetime.strptime(row[6], '%Y-%m-%d %H:%M:%S.%f') if row[6] is not None else None
                 )
                 todos.append(todo)
 
