@@ -111,7 +111,7 @@ class SQLiteTodoRepository(TodoRepository):
 
         update_todo_query = '''
         UPDATE todo
-        SET task = ?, completed = ?, due_date = ?, updated_at = ?
+        SET task = ?, completed = ?, due_date = ?, location_id = ?, updated_at = ?
         WHERE id = ?;
         '''
 
@@ -120,6 +120,7 @@ class SQLiteTodoRepository(TodoRepository):
                 todo.task,
                 todo.completed,
                 todo.due_date,
+                todo.location_id,
                 todo.updated_at,
                 str(todo.id)
             ))
@@ -156,7 +157,7 @@ class SQLiteTodoRepository(TodoRepository):
 
         update_location_query = '''
         UPDATE location
-        SET latitude = ?, longitude = ?, address = ?, updated_at = ?
+        SET latitude = ?, longitude = ?, address = ?
         WHERE id = ?;
         '''
 

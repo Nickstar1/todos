@@ -32,6 +32,5 @@ def get_latitude_longitude_address(address: str) -> Tuple[float, float, str]:
     street: str = data[0]['address']['road']
     house_number: str = data[0]['address'].get('house_number', '') 
     address: str = f'{street} {house_number}'
-    print(address)
     
     return (float(data[0]['lat']), float(data[0]['lon']), address)
