@@ -4,12 +4,12 @@ from app.exceptions.no_location_found_error import NoLocationFoundError
 
 
 class LocationResolverService:
-    def __init__(self, get_latitude_longitude):
-        self.get_latitude_longitude = get_latitude_longitude
+    def __init__(self, get_latitude_longitude_address):
+        self.get_latitude_longitude_address = get_latitude_longitude_address
 
-    def resolve_location(self, address: str) -> Location:
+    def run(self, address: str) -> Location:
         try:
-            latitude, longitude = self.get_latitude_longitude(address)
+            latitude, longitude, address = self.get_latitude_longitude_address(address)
             return Location(address=address, latitude=latitude, longitude=longitude)
         except (LocationFetchError, NoLocationFoundError) as e:
             print(f'error resolving location for address: {e}')

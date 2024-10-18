@@ -9,12 +9,13 @@ from app.exceptions.no_location_found_error import NoLocationFoundError
 
 LocationData = Dict[str, Any]
 
-def get_latitude_longitude(address: str) -> Tuple[float, float]:
+def get_latitude_longitude_address(address: str) -> Tuple[float, float, str]:
     url = 'https://nominatim.openstreetmap.org/search'
     params: dict[str, str] = {
         'q': address,
         'format': 'json',
-        'limit': 1
+        'limit': '1',
+        'addressdetails': '1'
     }
     headers: dict[str, str] = {'User-Agent': 'todos-app/1.0'}
 
@@ -28,4 +29,9 @@ def get_latitude_longitude(address: str) -> Tuple[float, float]:
     if not data:
         raise NoLocationFoundError(address)
     
-    return (float(data[0]['lat']), float(data[0]['lon']))
+    street: str = data[0]['address']['road']
+    house_number: str = data[0]['address'].get('house_number', '') 
+    address: str = f'{street} {house_number}'
+    print(address)
+    
+    return (float(data[0]['lat']), float(data[0]['lon']), address)
