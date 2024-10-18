@@ -15,7 +15,7 @@ class CreateTodoService:
         if not task.strip():
             raise ValueError('task cannot be empty')
         
-        if due_date and due_date < datetime.now():
+        if due_date and due_date.date() < datetime.now().date():
             raise ValueError('due date cannot be in the past')
 
         todo_id = uuid.uuid4()

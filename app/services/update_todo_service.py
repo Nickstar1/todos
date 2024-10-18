@@ -12,6 +12,12 @@ class UpdateTodoService:
         self.todo_repo: TodoRepository = todo_repo
 
     def run(self, todo_id: uuid.UUID, task: str, location: Optional[Location], due_date: Optional[datetime]) -> Todo:
+        if not task.strip():
+            raise ValueError('task cannot be empty')
+        
+        if due_date and due_date.date() < datetime.now().date():
+            raise ValueError('due date cannot be in the past')
+        
         todo: Optional[Todo] = None
 
         try:
